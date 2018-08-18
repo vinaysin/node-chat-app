@@ -13,15 +13,13 @@ var io = socketIO(server);
 app.use(express.static(publicPath));
 io.on('connection', (socket) => {
     console.log('Client connected...');
-
-    socket.emit('newMessage', {
-        from: 'vinay@abc.com',
-        text: 'Hi, How are you?',
-        createdAt: Date()
-    });
-
-    socket.on('createMessage', (newMessage) => {
-        console.log('Created message:', newMessage);
+    socket.on('createMessage', (message) => {
+        console.log('Created message:', message);
+        io.emit('newMessage', {
+            from: message.from,
+            text: message.text,
+            createdAt: new Date()
+        });
     });
 
     socket.on('disconnect', () => {
